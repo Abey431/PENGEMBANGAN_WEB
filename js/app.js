@@ -2,7 +2,7 @@
  * E-Learning UNIVERSITAS JANABADRA - Main Application Logic
  * Program Studi Informatika - Fakultas Teknik
  * Mahasiswa: Taja Abi Nugraha (NIM: 24330029)
- * Mata Kuliah Utama: Pengembangan Aplikasi Web
+ * Mata Kuliah Utama: Pengembangan Aplikasi Web (Eri Haryanto, S.Kom., M.Kom.)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -168,21 +168,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = [];
 
     // Add views
-    items.push({ type: 'Halaman', title: 'Dashboard Utama', desc: 'Kembali ke ringkasan perkuliahan Informatika UJB', action: () => store.setView('dashboard') });
-    items.push({ type: 'Halaman', title: 'Pengembangan Aplikasi Web', desc: 'Materi inti kuliah Semester 3 (SPA, CSS3, ES6+)', action: () => store.setView('course-detail', { courseId: 'c-web' }) });
-    items.push({ type: 'Halaman', title: 'Katalog Mata Kuliah', desc: 'Lihat kurikulum semester 3 Informatika UJB', action: () => store.setView('courses') });
-    items.push({ type: 'Halaman', title: 'Tugas & Proyek SPA', desc: 'Deadline tugas proyek Pengembangan Aplikasi Web', action: () => store.setView('assignments') });
-    items.push({ type: 'Halaman', title: 'Kuis Interaktif Web', desc: 'Uji pemahaman JavaScript modern, DOM & CSS Grid', action: () => store.setView('quiz') });
+    items.push({ type: 'Halaman', title: 'Dashboard Utama', desc: 'Jadwal Kuliah & Ringkasan Semester 5 Informatika UJB', action: () => store.setView('dashboard') });
+    items.push({ type: 'Halaman', title: 'Pengembangan Aplikasi Web', desc: 'Mata kuliah utama (Selasa 10:00 - 12:10) • Eri Haryanto, M.Kom.', action: () => store.setView('course-detail', { courseId: 'c-paw' }) });
+    items.push({ type: 'Halaman', title: 'Katalog Mata Kuliah (12 Matkul)', desc: 'Lihat seluruh jadwal semester ganjil 2026', action: () => store.setView('courses') });
+    items.push({ type: 'Halaman', title: 'Tugas Proyek Web & Praktikum', desc: 'Deadline tugas SPA dan praktikum', action: () => store.setView('assignments') });
+    items.push({ type: 'Halaman', title: 'Kuis Interaktif Web', desc: 'Uji kompetensi arsitektur web modern', action: () => store.setView('quiz') });
     items.push({ type: 'Halaman', title: 'Presensi Digital UJB', desc: 'Validasi kehadiran Kampus Timoho', action: () => store.setView('attendance') });
     items.push({ type: 'Halaman', title: 'Forum Diskusi Informatika', desc: 'Tanya jawab dosen & mahasiswa UJB', action: () => store.setView('forum') });
-    items.push({ type: 'Halaman', title: 'Transkrip / KHS Digital', desc: 'Nilai dan evaluasi hasil studi Taja Abi Nugraha', action: () => store.setView('grades') });
+    items.push({ type: 'Halaman', title: 'Transkrip / KHS Digital (22 SKS)', desc: 'Kartu Hasil Studi resmi Taja Abi Nugraha (24330029)', action: () => store.setView('grades') });
 
-    // Add courses
+    // Add all 12 courses to palette
     store.state.courses.forEach(c => {
       items.push({
         type: 'Mata Kuliah',
         title: `${c.code} - ${c.title}`,
-        desc: `Dosen: ${c.lecturer} (${c.sks} SKS)`,
+        desc: `${c.day}, ${c.time} • ${c.lecturer} (${c.sks} SKS)`,
         action: () => store.setView('course-detail', { courseId: c.id })
       });
     });
@@ -273,6 +273,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // Update Course Count Badge
+    const courseBadge = document.getElementById('sidebar-course-badge');
+    if (courseBadge) {
+      courseBadge.textContent = state.courses.length;
+    }
+
     // Update Pending task badge
     const taskBadge = document.getElementById('sidebar-task-badge');
     if (taskBadge) {
@@ -326,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <h1 class="hero-title">Selamat Datang, ${user.name.split(' ')[0]}!</h1>
           <p class="hero-subtitle">
-            Portal E-Learning Resmi Universitas Janabadra Yogyakarta. Fokus utama perkuliahan semester ini: <strong>Pengembangan Aplikasi Web</strong> berstandar industri digital dan berjiwa kebangsaan mandiri.
+            Portal E-Learning Resmi Universitas Janabadra Yogyakarta. Jadwal perkuliahan Semester Ganjil 2026 (Semester 5): <strong>12 Mata Kuliah (Total 22 SKS)</strong> dengan mata kuliah utama <strong>Pengembangan Aplikasi Web</strong> bersama Dosen Pengampu <strong>Eri Haryanto, S.Kom., M.Kom.</strong>
           </p>
           <div class="hero-meta-row">
             <div class="hero-meta-item">
@@ -336,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ${ICONS.clock} <span class="hero-live-time" id="live-time-display">${now.toLocaleTimeString('id-ID')} WIB</span>
             </div>
             <div class="hero-meta-item">
-              ${ICONS.book} ${state.university.semester}
+              ${ICONS.book} ${state.university.semester} • 22 SKS
             </div>
           </div>
         </div>
@@ -354,9 +360,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ${ICONS.book}
           </div>
           <div class="stat-info">
-            <span class="stat-value">${state.quickStats.activeCourses}</span>
-            <span class="stat-label">Mata Kuliah Aktif</span>
-            <span class="stat-trend">✓ Semester 3 Informatika</span>
+            <span class="stat-value">${state.courses.length} Matkul</span>
+            <span class="stat-label">Total Beban: 22 SKS</span>
+            <span class="stat-trend">✓ Semester 5 Ganjil</span>
           </div>
         </div>
 
@@ -366,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="stat-info">
             <span class="stat-value">${state.quickStats.pendingTasks}</span>
-            <span class="stat-label">Tugas Proyek Web</span>
+            <span class="stat-label">Tugas Menunggu</span>
             <span class="stat-trend" style="color: var(--accent-600);">⏳ Batas 30 Sep</span>
           </div>
         </div>
@@ -377,8 +383,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="stat-info">
             <span class="stat-value">${state.quickStats.attendancePct}%</span>
-            <span class="stat-label">Tingkat Presensi</span>
-            <span class="stat-trend">↑ Sangat Baik (Kampus Timoho)</span>
+            <span class="stat-label">Presensi Kampus Timoho</span>
+            <span class="stat-trend">↑ Sangat Baik & Lengkap</span>
           </div>
         </div>
 
@@ -402,31 +408,31 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="card" style="margin-bottom: 1.75rem; padding: 1.25rem;">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
               <div>
-                <div style="font-size: 1rem; font-weight: 700;">Akses Cepat Perkuliahan</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">Pilih modul pembelajaran Pengembangan Aplikasi Web hari ini</div>
+                <div style="font-size: 1rem; font-weight: 700;">Akses Perkuliahan Hari Ini</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Masuk langsung ke ruang materi kuliah Pengembangan Aplikasi Web (Eri Haryanto, M.Kom.)</div>
               </div>
               <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
-                <button class="btn btn-primary btn-sm" id="btn-quick-web">
-                  ${ICONS.play} Masuk Kelas Pengembangan Web
+                <button class="btn btn-primary btn-sm" id="btn-quick-paw">
+                  ${ICONS.play} Masuk Kelas Web (IF2351445)
                 </button>
                 <button class="btn btn-accent btn-sm" id="btn-quick-quiz">
                   ${ICONS.quiz} Ikuti Kuis Web
                 </button>
                 <button class="btn btn-secondary btn-sm" id="btn-quick-attendance">
-                  ${ICONS.attendance} Presensi Cepat
+                  ${ICONS.attendance} Presensi Timoho
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Courses Quick List -->
+          <!-- Courses Quick List (Highlighting First 6) -->
           <div class="card" style="margin-bottom: 1.75rem;">
             <div class="card-header">
               <div>
-                <h2 class="card-title">${ICONS.book} Mata Kuliah Semester 3 Informatika UJB</h2>
-                <div class="card-subtitle">Kurikulum Berbasis Kompetensi Teknologi Digital & Kewirausahaan</div>
+                <h2 class="card-title">${ICONS.book} Daftar Mata Kuliah Semester 5 (2026 Ganjil)</h2>
+                <div class="card-subtitle">Sesuai Kartu Rencana Studi (KRS) Taja Abi Nugraha — 12 Mata Kuliah</div>
               </div>
-              <button class="btn btn-subtle btn-sm" id="btn-see-all-courses">Lihat Semua (6) →</button>
+              <button class="btn btn-subtle btn-sm" id="btn-see-all-courses">Lihat Semua (12) →</button>
             </div>
 
             <div class="courses-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
@@ -435,11 +441,14 @@ document.addEventListener('DOMContentLoaded', () => {
                   <div class="course-card-banner" style="background: ${c.coverGradient};">
                     <div class="course-banner-top">
                       <span class="course-code-pill">${c.code}</span>
-                      <span class="course-sks-badge">${c.sks} SKS</span>
+                      <span class="course-sks-badge">${c.sks} SKS • ${c.category}</span>
                     </div>
                     <div class="course-card-title">${c.title}</div>
                   </div>
                   <div class="course-card-body">
+                    <div class="badge badge-amber" style="width: fit-content; font-size: 0.72rem; margin-bottom: 0.25rem;">
+                      🗓 ${c.day}, ${c.time} WIB
+                    </div>
                     <div class="course-lecturer-row">
                       <img src="${c.lecturerAvatar}" alt="${c.lecturer}" class="course-lecturer-avatar">
                       <span class="course-lecturer-name">${c.lecturer}</span>
@@ -464,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="card">
             <div class="card-header">
               <div>
-                <h2 class="card-title">${ICONS.assignment} Tugas Proyek Mendesak</h2>
+                <h2 class="card-title">${ICONS.assignment} Tugas Proyek & Praktikum</h2>
                 <div class="card-subtitle">Mahasiswa: ${user.name} (${user.identifier})</div>
               </div>
               <button class="btn btn-subtle btn-sm" id="btn-see-all-tasks">Semua Tugas →</button>
@@ -495,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="card" style="margin-bottom: 1.75rem;">
             <div class="card-header">
               <div>
-                <h3 class="card-title">${ICONS.calendar} Jadwal Kuliah Hari Ini</h3>
+                <h3 class="card-title">${ICONS.calendar} Jadwal Perkuliahan Hari Ini</h3>
                 <div class="card-subtitle">${dateFormatted}</div>
               </div>
               <span class="badge badge-emerald">Aktif</span>
@@ -547,8 +556,8 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     // Bind dashboard buttons
-    document.getElementById('btn-quick-web')?.addEventListener('click', () => {
-      store.setView('course-detail', { courseId: 'c-web' });
+    document.getElementById('btn-quick-paw')?.addEventListener('click', () => {
+      store.setView('course-detail', { courseId: 'c-paw' });
     });
     document.getElementById('btn-quick-quiz')?.addEventListener('click', () => {
       store.setView('quiz');
@@ -581,17 +590,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- VIEW: COURSES CATALOG ---
+  // --- VIEW: COURSES CATALOG (ALL 12 COURSES) ---
   function renderCourses(state) {
     appContainer.innerHTML = `
       <div style="margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
-          <h1 style="font-size: 1.75rem; font-weight: 800;">Katalog Perkuliahan Semester 3</h1>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">Program Studi Informatika - Fakultas Teknik Universitas Janabadra Yogyakarta</p>
-        </div>
-        <div style="display: flex; gap: 0.5rem;">
-          <button class="btn btn-primary btn-sm active" id="filter-all-courses">Semua Mata Kuliah (${state.courses.length})</button>
-          <button class="btn btn-subtle btn-sm" id="filter-prodi-courses">Wajib Prodi</button>
+          <h1 style="font-size: 1.75rem; font-weight: 800;">Jadwal & Katalog Mata Kuliah Tahun 2026 Semester Ganjil</h1>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Program Studi Informatika - Fakultas Teknik Universitas Janabadra (Total: 12 Mata Kuliah / 22 SKS)</p>
         </div>
       </div>
 
@@ -601,11 +606,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="course-card-banner" style="background: ${c.coverGradient};">
               <div class="course-banner-top">
                 <span class="course-code-pill">${c.code}</span>
-                <span class="course-sks-badge">${c.sks} SKS • ${c.category}</span>
+                <span class="course-sks-badge">${c.sks} SKS • SMT ${c.semester}</span>
               </div>
               <div class="course-card-title">${c.title}</div>
             </div>
             <div class="course-card-body">
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="badge badge-amber" style="font-size: 0.72rem;">🗓 ${c.day}, ${c.time} WIB</span>
+                <span class="badge badge-emerald" style="font-size: 0.72rem;">${c.category}</span>
+              </div>
               <div class="course-lecturer-row">
                 <img src="${c.lecturerAvatar}" alt="${c.lecturer}" class="course-lecturer-avatar">
                 <span class="course-lecturer-name">${c.lecturer}</span>
@@ -646,12 +655,12 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="course-detail-header">
         <div>
           <button class="btn btn-subtle btn-sm" id="btn-back-to-courses" style="margin-bottom: 0.75rem;">
-            ← Kembali ke Katalog Kursus
+            ← Kembali ke Katalog Kursus (${state.courses.length} Matkul)
           </button>
-          <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.35rem;">
+          <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
             <span class="course-code-pill" style="background: var(--primary-600); color: #fff;">${course.code}</span>
-            <span class="badge badge-emerald">${course.sks} SKS</span>
-            <span class="badge badge-indigo">${course.category}</span>
+            <span class="badge badge-emerald">${course.sks} SKS • SMT ${course.semester}</span>
+            <span class="badge badge-amber">🗓 ${course.day}, ${course.time} WIB</span>
           </div>
           <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-main);">${course.title}</h1>
           <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
@@ -679,10 +688,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${ICONS.play}
               </div>
               <div style="font-weight: 700; font-size: 1.15rem; color: #fff;" id="video-now-playing-title">
-                Pertemuan 8: Arsitektur Single Page Application (SPA), State Management & Fetch API
+                ${course.title} (${course.code}) - Pertemuan 8
               </div>
               <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.75); margin-top: 0.35rem;">
-                Video Pembelajaran Interaktif Informatika Universitas Janabadra • Durasi: 70 Menit
+                Dosen: ${course.lecturer} • Lab Komputer Kampus Timoho UJB
               </div>
             </div>
             <!-- Video Controls -->
@@ -702,23 +711,23 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-header">
               <div>
                 <h3 class="card-title">${ICONS.book} Ringkasan Materi & Capaian Pembelajaran (CPMK)</h3>
-                <div class="card-subtitle">Pertemuan 8: Single Page Application & Reactive State Management</div>
+                <div class="card-subtitle">${course.title} • Pertemuan 8</div>
               </div>
               <button class="btn btn-primary btn-sm" id="btn-download-slide">
-                ${ICONS.download} Unduh Slide PDF (6.8 MB)
+                ${ICONS.download} Unduh Slide PDF Materi
               </button>
             </div>
             <div style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6;">
               <p style="margin-bottom: 0.75rem;">
-                Pada materi pertemuan ini dikupas tuntas teknik pembuatan arsitektur <strong>Single Page Application (SPA)</strong> menggunakan JavaScript murni (Vanilla JS), konsep Client-Side Routing, pengelolaan state reaktif (Pub/Sub pattern), dan persistensi data browser via <code>localStorage</code>.
+                Membahas capaian kompetensi dasar dan tingkat lanjut pada mata kuliah <strong>${course.title}</strong>, implementasi studi kasus nyata, integrasi praktikum laboratorium komputer, dan penugasan proyek.
               </p>
               <div style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary-600); margin-bottom: 1rem;">
-                <strong>Capaian Pembelajaran Khusus (CPMK 3):</strong> Mahasiswa mampu merancang antarmuka web interaktif bebas reload yang mengintegrasikan manipulasi DOM dinamis, arsitektur komponen modular, dan penanganan data asinkron.
+                <strong>Jadwal Perkuliahan:</strong> Hari ${course.day}, Pukul ${course.time} WIB • Dosen Pengampu: ${course.lecturer}.
               </div>
               <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                <span class="badge badge-emerald">#SinglePageApp</span>
-                <span class="badge badge-indigo">#ModernJavaScript</span>
-                <span class="badge badge-amber">#StateManagement</span>
+                <span class="badge badge-emerald">#${course.code}</span>
+                <span class="badge badge-indigo">#InformatikaUJB</span>
+                <span class="badge badge-amber">#Semester5</span>
                 <span class="badge badge-subtle">#UniversitasJanabadra</span>
               </div>
             </div>
@@ -726,7 +735,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <!-- Personal Student Notes Box -->
           <div class="card">
-            <h3 class="card-title" style="margin-bottom: 0.75rem;">📝 Catatan Mahasiswa: ${state.currentUser.name}</h3>
+            <h3 class="card-title" style="margin-bottom: 0.75rem;">📝 Catatan Mahasiswa: ${state.currentUser.name} (${state.currentUser.identifier})</h3>
             <textarea class="form-control" id="personal-notes-input" placeholder="Tuliskan catatan penting materi kuliah di sini (otomatis tersimpan ke browser Anda)..." style="min-height: 120px;"></textarea>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem;">
               <span style="font-size: 0.75rem; color: var(--text-muted);" id="notes-status-text">Status: Tersimpan Lokal</span>
@@ -741,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-header">
               <div>
                 <h3 class="card-title">${ICONS.calendar} Silabus & Pertemuan</h3>
-                <div class="card-subtitle">Pengembangan Aplikasi Web Semester 3</div>
+                <div class="card-subtitle">${course.title}</div>
               </div>
             </div>
             <div class="syllabus-list">
@@ -982,7 +991,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const quiz = state.quizList[0];
     const totalQ = quiz.questions.length;
 
-    // If quiz completed, show score summary
     if (quiz.completed && !currentQuizState.isRetaking) {
       renderQuizResult(quiz);
       return;
@@ -991,7 +999,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentQ = quiz.questions[currentQuizState.currentIndex];
     const selectedOpt = currentQuizState.answers[currentQ.id];
 
-    // Format minutes:seconds
     const mins = Math.floor(currentQuizState.timeRemaining / 60).toString().padStart(2, '0');
     const secs = (currentQuizState.timeRemaining % 60).toString().padStart(2, '0');
 
@@ -1055,7 +1062,6 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    // Start timer if not running
     if (!currentQuizState.timerInterval) {
       currentQuizState.timerInterval = setInterval(() => {
         if (currentQuizState.timeRemaining > 0) {
@@ -1071,7 +1077,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1000);
     }
 
-    // Option selection bindings
     document.querySelectorAll('.quiz-option-item').forEach(el => {
       el.addEventListener('click', () => {
         const optIdx = parseInt(el.dataset.optIdx, 10);
@@ -1184,10 +1189,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- VIEW: DIGITAL ATTENDANCE ---
+  // --- VIEW: DIGITAL ATTENDANCE (12 COURSES) ---
   function renderAttendance(state) {
     const records = state.attendanceRecords;
-    const webRecord = records.find(r => r.courseId === 'c-web') || records[0];
+    const pawRecord = records.find(r => r.courseId === 'c-paw') || records[0];
 
     appContainer.innerHTML = `
       <div style="margin-bottom: 2rem;">
@@ -1207,18 +1212,18 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div>
             <span class="badge badge-emerald" style="margin-bottom: 0.5rem;">GPS Status: Radius Kampus Timoho UJB Terverifikasi</span>
-            <h2 style="font-size: 1.35rem; font-weight: 800;">Presensi Kuliah: ${webRecord.courseName}</h2>
+            <h2 style="font-size: 1.35rem; font-weight: 800;">Presensi Kuliah: ${pawRecord.courseName} (${pawRecord.courseCode})</h2>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
-              Pertemuan 8: Single Page Application & State Management • Ir. Bambang Pratama, M.Eng.
+              Selasa, 10:00 - 12:10 WIB • Dosen: Eri Haryanto, S.Kom., M.Kom.
             </p>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
-              Status Anda: <strong>${webRecord.todayCheckedIn ? '✅ Sudah Presensi (' + webRecord.lastCheckIn + ')' : '⏳ Belum Mengisi Kehadiran'}</strong>
+              Status Anda: <strong>${pawRecord.todayCheckedIn ? '✅ Sudah Presensi (' + pawRecord.lastCheckIn + ')' : '⏳ Belum Mengisi Kehadiran'}</strong>
             </div>
           </div>
         </div>
 
         <div>
-          ${webRecord.todayCheckedIn ? `
+          ${pawRecord.todayCheckedIn ? `
             <button class="btn btn-primary" disabled style="opacity: 0.85; cursor: default;">
               ✓ Kehadiran Terverifikasi
             </button>
@@ -1234,8 +1239,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="card">
         <div class="card-header">
           <div>
-            <h3 class="card-title">${ICONS.attendance} Rekapitulasi Presensi Semester Ganjil 2026/2027</h3>
-            <div class="card-subtitle">Mahasiswa: ${state.currentUser.name} (${state.currentUser.identifier})</div>
+            <h3 class="card-title">${ICONS.attendance} Rekapitulasi Presensi Semester Ganjil 2026 (12 Mata Kuliah)</h3>
+            <div class="card-subtitle">Mahasiswa: ${state.currentUser.name} (${state.currentUser.identifier}) • Syarat Mengikuti UAS: Kehadiran Min. 75%</div>
           </div>
         </div>
 
@@ -1243,6 +1248,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <table class="khs-table">
             <thead>
               <tr>
+                <th>Kode</th>
                 <th>Mata Kuliah</th>
                 <th>Total Pertemuan</th>
                 <th>Hadir</th>
@@ -1255,6 +1261,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <tbody>
               ${records.map(r => `
                 <tr>
+                  <td style="font-family: var(--font-mono); font-weight: 700;">${r.courseCode}</td>
                   <td style="font-weight: 700; color: var(--text-main);">${r.courseName}</td>
                   <td>${r.totalMeetings} Sesi</td>
                   <td style="color: var(--primary-600); font-weight: 700;">${r.attended}</td>
@@ -1275,7 +1282,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     document.getElementById('btn-do-checkin')?.addEventListener('click', () => {
-      store.checkInAttendance('c-web');
+      store.checkInAttendance('c-paw');
       showToast('success', 'Presensi Berhasil!', 'Kehadiran Anda pada Pengembangan Aplikasi Web berhasil dicatat di server Universitas Janabadra.');
       render();
     });
@@ -1429,7 +1436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // --- VIEW: TRANSCRIPTS & KHS ---
+  // --- VIEW: TRANSCRIPTS & KHS (12 MATKUL - TOTAL 22 SKS) ---
   function renderGrades(state) {
     const user = state.currentUser;
     const transcripts = state.academicTranscripts;
@@ -1447,7 +1454,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div style="margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
           <h1 style="font-size: 1.75rem; font-weight: 800;">Kartu Hasil Studi (KHS) Digital</h1>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">Evaluasi Hasil Pembelajaran Semester Ganjil 2026/2027 • Universitas Janabadra</p>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Evaluasi Hasil Pembelajaran Semester Ganjil 2026 (Semester 5) • Universitas Janabadra</p>
         </div>
         <button class="btn btn-primary" id="btn-print-khs">
           ${ICONS.download} Unduh & Cetak KHS Resmi (PDF)
@@ -1525,7 +1532,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="card" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
         <div>
           <div style="font-size: 1.1rem; font-weight: 800;">Predikat Kelulusan: <span style="color: var(--primary-600);">DENGAN PUJIAN (CUMLAUDE)</span></div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">IPK Kumulatif Saat Ini: 3.90 • Beban Maksimal Semester Depan: 24 SKS</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">IPK Kumulatif Saat Ini: 3.92 • Beban Maksimal Semester Depan: 24 SKS</div>
         </div>
         <div class="badge badge-emerald" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
           ✓ Dokumen Terverifikasi Digital oleh BAAK Universitas Janabadra Yogyakarta

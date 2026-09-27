@@ -1,12 +1,13 @@
 /**
  * E-Learning UNIVERSITAS JANABADRA - State Management
  * Handles reactive state, local storage persistence, multi-role switching, and business actions.
+ * Updated with exact 12 courses from Jadwal Matakuliah Tahun 2026 Semester Ganjil.
  */
 
 class AppStore {
   constructor() {
-    // Unique version key to ensure Universitas Janabadra & Taja Abi Nugraha data is immediately loaded
-    this.STORAGE_KEY = 'janabadra_elearning_v2';
+    // Unique version key to ensure new 12-course schedule is immediately loaded
+    this.STORAGE_KEY = 'janabadra_elearning_v3';
     this.subscribers = [];
     this.state = this.loadState();
   }
@@ -23,7 +24,7 @@ class AppStore {
           currentRole: parsed.currentRole || 'mahasiswa',
           currentView: parsed.currentView || 'dashboard',
           theme: parsed.theme || 'light',
-          selectedCourseId: parsed.selectedCourseId || 'c-web'
+          selectedCourseId: parsed.selectedCourseId || 'c-paw'
         };
       }
     } catch (e) {
@@ -35,7 +36,7 @@ class AppStore {
       currentRole: 'mahasiswa',
       currentView: 'dashboard',
       theme: 'light',
-      selectedCourseId: 'c-web'
+      selectedCourseId: 'c-paw'
     };
   }
 
@@ -109,15 +110,13 @@ class AppStore {
     if (!asg) return false;
 
     asg.status = 'Telah Diserahkan';
-    asg.submittedFile = fileName || 'Tugas_PAW_TajaAbiNugraha_24330029.pdf';
+    asg.submittedFile = fileName || 'Proyek_PAW_TajaAbiNugraha_24330029.zip';
     asg.submittedAt = 'Baru saja (' + new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB)';
     asg.studentNote = textNote || '';
 
-    // Update pending tasks count
     this.state.quickStats.pendingTasks = Math.max(0, this.state.quickStats.pendingTasks - 1);
     this.state.quickStats.completedTasks += 1;
 
-    // Add notification
     this.state.notifications.unshift({
       id: 'notif-' + Date.now(),
       title: 'Tugas Berhasil Diserahkan',
