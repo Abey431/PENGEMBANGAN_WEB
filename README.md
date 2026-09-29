@@ -4,7 +4,7 @@
 
 ### **PENGEMBANGAN APLIKASI WEB**
 
-#### **PROYEK AKHIR SEMESTER**
+#### **PROYEK SEMESTER V**
 
 ## **Aplikasi Sistem Informasi E-Learning untuk Meningkatkan Mutu Pendidikan di Era Digital**
 
