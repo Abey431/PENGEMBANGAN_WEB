@@ -117,4 +117,4 @@ PENGEMBANGAN_WEB/
 
 ---
 
-*Proyek Akhir Semester Mata Kuliah Pengembangan Aplikasi Web — Program Studi Informatika, Fakultas Teknik, Universitas Janabadra Yogyakarta, 2026.*
+*Proyek Semester V Mata Kuliah Pengembangan Aplikasi Web — Program Studi Informatika, Fakultas Teknik, Universitas Janabadra Yogyakarta, 2026.*
